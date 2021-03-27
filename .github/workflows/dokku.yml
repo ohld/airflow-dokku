@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 0
+
+    - id: deploy
+      name: Trigger Dokku deployment
+      uses: idoberko2/dokku-deploy-github-action@v1
+      with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          dokku-host: '<YOUR HOST>'
+          app-name: 'airflow'
+          git-push-flags: '--force'
